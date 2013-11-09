@@ -4,6 +4,8 @@ module Doorkeeper
 
     def create
       response = strategy.authorize
+      #so that devise #trackable works
+      current_resource_owner.update_tracked_fields!(request)
       self.headers.merge! response.headers
       self.response_body = response.body.to_json
       self.status        = response.status
